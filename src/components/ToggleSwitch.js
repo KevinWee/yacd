@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 import s0 from './ToggleSwitch.module.css';
@@ -9,6 +10,7 @@ function ToggleSwitch({ options, value, name, onChange }) {
     value
   ]);
   const w = (100 / options.length).toPrecision(3);
+  let { t } = useTranslation();
   return (
     <div>
       <div className={s0.ToggleSwitch}>
@@ -32,7 +34,7 @@ function ToggleSwitch({ options, value, name, onChange }) {
                 checked={value === o.value}
                 onChange={onChange}
               />
-              <div>{o.label}</div>
+              <div>{t(o.label)}</div>
             </label>
           );
         })}

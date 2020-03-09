@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import Button from './Button';
 import { FixedSizeList as List, areEqual } from 'react-window';
 import { RotateCw } from 'react-feather';
@@ -47,9 +48,10 @@ function Rules({ dispatch, apiConfig, rules }) {
   }, [dispatch, apiConfig]);
   const [refRulesContainer, containerHeight] = useRemainingViewPortHeight();
   const refreshIcon = useMemo(() => <RotateCw width={16} />, []);
+  let { t } = useTranslation();
   return (
     <div>
-      <ContentHeader title="Rules" />
+      <ContentHeader title={t('Rules')} />
       <RuleSearch />
       <div ref={refRulesContainer} style={{ paddingBottom }}>
         <List
@@ -64,7 +66,11 @@ function Rules({ dispatch, apiConfig, rules }) {
         </List>
       </div>
       <div className="fabgrp">
-        <Button text="Refresh" start={refreshIcon} onClick={fetchRulesHooked} />
+        <Button
+          text={t('Refresh')}
+          start={refreshIcon}
+          onClick={fetchRulesHooked}
+        />
       </div>
     </div>
   );

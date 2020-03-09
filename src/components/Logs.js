@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { connect } from './StateProvider';
@@ -76,10 +77,10 @@ function Logs({ dispatch, logLevel, apiConfig, logs }) {
     fetchLogs({ hostname, port, secret, logLevel }, appendLogInternal);
   }, [hostname, port, secret, logLevel, appendLogInternal]);
   const [refLogsContainer, containerHeight] = useRemainingViewPortHeight();
-
+  let { t } = useTranslation();
   return (
     <div>
-      <ContentHeader title="Logs" />
+      <ContentHeader title={t('Logs')} />
       <LogSearch />
       <div ref={refLogsContainer} style={{ paddingBottom }}>
         {logs.length === 0 ? (
@@ -90,7 +91,7 @@ function Logs({ dispatch, logLevel, apiConfig, logs }) {
             <div className={s0.logPlaceholderIcon}>
               <SvgYacd width={200} height={200} />
             </div>
-            <div>No logs yet, hang tight...</div>
+            <div>{t('No logs yet, hang tight...')}</div>
           </div>
         ) : (
           <div className={s0.logsWrapper}>

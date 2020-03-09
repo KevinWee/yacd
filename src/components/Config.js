@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import PropTypes from 'prop-types';
 
 import { connect, useStoreActions } from './StateProvider';
@@ -166,13 +167,13 @@ function ConfigImpl({
     },
     [apiConfig, dispatch, updateAppConfig]
   );
-
+  let { t } = useTranslation();
   return (
     <div>
-      <ContentHeader title="Config" />
+      <ContentHeader title={t('Config')} />
       <div className={s0.root}>
         <div>
-          <div className={s0.label}>HTTP Proxy Port</div>
+          <div className={s0.label}>{t('HTTP Proxy Port')}</div>
           <Input
             name="port"
             value={configState.port}
@@ -182,7 +183,7 @@ function ConfigImpl({
         </div>
 
         <div>
-          <div className={s0.label}>SOCKS5 Proxy Port</div>
+          <div className={s0.label}>{t('SOCKS5 Proxy Port')}</div>
           <Input
             name="socks-port"
             value={configState['socks-port']}
@@ -192,7 +193,7 @@ function ConfigImpl({
         </div>
 
         <div>
-          <div className={s0.label}>Redir Port</div>
+          <div className={s0.label}>{t('Redir Port')}</div>
           <Input
             name="redir-port"
             value={configState['redir-port']}
@@ -202,7 +203,7 @@ function ConfigImpl({
         </div>
 
         <div>
-          <div className={s0.label}>Allow LAN</div>
+          <div className={s0.label}>{t('Allow LAN')}</div>
           <Switch
             name="allow-lan"
             checked={configState['allow-lan']}
@@ -211,7 +212,7 @@ function ConfigImpl({
         </div>
 
         <div>
-          <div className={s0.label}>Mode</div>
+          <div className={s0.label}>{t('Mode')}</div>
           <ToggleSwitch
             options={optionsRule}
             name="mode"
@@ -221,7 +222,7 @@ function ConfigImpl({
         </div>
 
         <div>
-          <div className={s0.label}>Log Level</div>
+          <div className={s0.label}>{t('Log Level')}</div>
           <ToggleSwitch
             options={optionsLogLevel}
             name="log-level"
@@ -237,7 +238,7 @@ function ConfigImpl({
 
       <div className={s0.section}>
         <div>
-          <div className={s0.label}>Chart Style</div>
+          <div className={s0.label}>{t('Chart Style')}</div>
           <Selection
             OptionComponent={TrafficChartSample}
             optionPropsList={propsList}
@@ -246,7 +247,7 @@ function ConfigImpl({
           />
         </div>
         <div style={{ maxWidth: 360 }}>
-          <div className={s0.label}>Latency Test URL</div>
+          <div className={s0.label}>{t('Latency Test URL')}</div>
           <SelfControlledInput
             name="latencyTestUrl"
             type="text"
@@ -255,8 +256,8 @@ function ConfigImpl({
           />
         </div>
         <div>
-          <div className={s0.label}>Action</div>
-          <Button label="Log out" onClick={clearStorage} />
+          <div className={s0.label}>{t('Action')}</div>
+          <Button label={t('Log out')} onClick={clearStorage} />
         </div>
       </div>
     </div>

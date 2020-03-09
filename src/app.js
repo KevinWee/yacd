@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import Root from './components/Root';
+import './i18n';
 
 const rootEl = document.getElementById('app');
 
@@ -14,6 +15,6 @@ const root = createRoot(rootEl);
 root.render(<Root />);
 
 // eslint-disable-next-line no-console
-console.log('Checkout the repo: https://github.com/haishanh/yacd');
+console.log('Checkout the repo: https://github.com/KevinWee/yacd');
 // eslint-disable-next-line
 console.log('Version:', __VERSION__);

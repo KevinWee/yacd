@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import { fetchData } from '../api/traffic';
 import useLineChart from '../hooks/useLineChart';
 import { connect } from './StateProvider';
@@ -26,6 +27,7 @@ function TrafficChart({ apiConfig, selectedChartStyleIndex }) {
   const Chart = chartJSResource.read();
   const { hostname, port, secret } = apiConfig;
   const traffic = fetchData({ hostname, port, secret });
+  const { t } = useTranslation();
   const data = useMemo(
     () => ({
       labels: traffic.labels,
@@ -33,13 +35,13 @@ function TrafficChart({ apiConfig, selectedChartStyleIndex }) {
         {
           ...commonDataSetProps,
           ...chartStyles[selectedChartStyleIndex].up,
-          label: 'Up',
+          label: t('Upload'),
           data: traffic.up
         },
         {
           ...commonDataSetProps,
           ...chartStyles[selectedChartStyleIndex].down,
-          label: 'Down',
+          label: t('Download'),
           data: traffic.down
         }
       ]

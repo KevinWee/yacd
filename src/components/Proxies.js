@@ -1,6 +1,7 @@
 import React from 'react';
-
+import { useTranslation, Trans } from 'react-i18next';
 import { connect, useStoreActions } from './StateProvider';
+import { getConfigs } from '../store/configs';
 
 import ContentHeader from './ContentHeader';
 import ProxyGroup from './ProxyGroup';
@@ -30,7 +31,8 @@ function Proxies({
   delay,
   proxyProviders,
   apiConfig,
-  filterZeroRT
+  filterZeroRT,
+  mode
 }) {
   const refFetchedTimestamp = useRef({});
   const { toggleUnavailableProxiesFilter } = useStoreActions();
@@ -61,32 +63,47 @@ function Proxies({
     window.addEventListener('focus', fn, false);
     return () => window.removeEventListener('focus', fn, false);
   }, [fetchProxiesHooked]);
-
+  let { t } = useTranslation();
   return (
     <>
-      <ContentHeader title="Proxies" />
+      <ContentHeader title={t('Proxies')} />
       <div>
         {groupNames.map(groupName => {
-          return (
-            <div className={s0.group} key={groupName}>
-              <ProxyGroup
-                name={groupName}
-                delay={delay}
-                apiConfig={apiConfig}
-                dispatch={dispatch}
-              />
-            </div>
-          );
+          if (mode == 'Rule' && groupName != 'GLOBAL') {
+            return (
+              <div className={s0.group} key={groupName}>
+                <ProxyGroup
+                  name={groupName}
+                  delay={delay}
+                  apiConfig={apiConfig}
+                  dispatch={dispatch}
+                />
+              </div>
+            );
+          } else if (mode == 'Global' && groupName == 'GLOBAL') {
+            return (
+              <div className={s0.group} key={groupName}>
+                <ProxyGroup
+                  name={groupName}
+                  delay={delay}
+                  apiConfig={apiConfig}
+                  dispatch={dispatch}
+                />
+              </div>
+            );
+          }
         })}
       </div>
       <ProxyProviderList items={proxyProviders} />
       <div style={{ height: 60 }} />
       <Fab icon={<Circle />}>
-        <Action text="Test Latency" onClick={requestDelayAllFn}>
+        <Action text={t('Test Latency')} onClick={requestDelayAllFn}>
           <Zap width={16} />
         </Action>
         <Action
-          text={(filterZeroRT ? 'Show' : 'Hide') + ' Unavailable Proxies'}
+          text={
+            (filterZeroRT ? t('Show') : t('Hide')) + t(' Unavailable Proxies')
+          }
           onClick={toggleUnavailableProxiesFilter}
         >
           <Filter width={16} />
@@ -101,7 +118,8 @@ const mapState = s => ({
   groupNames: getProxyGroupNames(s),
   proxyProviders: getProxyProviders(s),
   delay: getDelay(s),
-  filterZeroRT: getRtFilterSwitch(s)
+  filterZeroRT: getRtFilterSwitch(s),
+  mode: getConfigs(s).mode
 });
 
 export default connect(mapState)(Proxies);

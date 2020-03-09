@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import { ChevronDown } from 'react-feather';
 import prettyBytes from '../misc/pretty-bytes';
 import { formatDistance } from 'date-fns';
@@ -54,6 +55,7 @@ function Table({ data }) {
     },
     useSortBy
   );
+  let { t } = useTranslation();
   return (
     <div {...getTableProps()}>
       <div className={s.thead}>
@@ -64,7 +66,7 @@ function Table({ data }) {
                 {...column.getHeaderProps(column.getSortByToggleProps())}
                 className={s.th}
               >
-                <span>{column.render('Header')}</span>
+                <span>{t(column.render('Header'))}</span>
                 <span className={s.sortIconContainer}>
                   {column.isSorted ? (
                     <span className={column.isSortedDesc ? '' : s.rotate180}>

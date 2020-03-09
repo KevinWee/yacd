@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { useTranslation, Trans } from 'react-i18next';
 import { connect } from './StateProvider';
 import Field from './Field';
 import Button from './Button';
@@ -79,6 +79,7 @@ function APIConfig({ apiConfig, dispatch }) {
     [updateConfig]
   );
 
+  let { t } = useTranslation();
   return (
     <div className={s0.root} ref={contentEl} onKeyDown={handleContentOnKeyDown}>
       <div className={s0.header}>
@@ -92,7 +93,7 @@ function APIConfig({ apiConfig, dispatch }) {
             <Field
               id="hostname"
               name="hostname"
-              label="Hostname"
+              label={t('Hostname')}
               type="text"
               value={hostname}
               onChange={handleInputOnChange}
@@ -102,7 +103,7 @@ function APIConfig({ apiConfig, dispatch }) {
             <Field
               id="port"
               name="port"
-              label="Port"
+              label={t('Port')}
               type="number"
               value={port}
               onChange={handleInputOnChange}
@@ -113,7 +114,7 @@ function APIConfig({ apiConfig, dispatch }) {
           <Field
             id="secret"
             name="secret"
-            label="Secret(optional)"
+            label={t('Secret(optional)')}
             value={secret}
             type="text"
             onChange={handleInputOnChange}
@@ -121,7 +122,7 @@ function APIConfig({ apiConfig, dispatch }) {
         </div>
       </div>
       <div className={s0.footer}>
-        <Button label="Confirm" onClick={updateConfig} />
+        <Button label={t('Confirm')} onClick={updateConfig} />
       </div>
     </div>
   );

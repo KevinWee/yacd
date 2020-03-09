@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import prettyBytes from '../misc/pretty-bytes';
 
 import { connect } from './StateProvider';
@@ -18,26 +19,27 @@ export default connect(mapState)(TrafficNow);
 function TrafficNow({ apiConfig }) {
   const { upStr, downStr } = useSpeed(apiConfig);
   const { upTotal, dlTotal, connNumber } = useConnection(apiConfig);
+  let { t } = useTranslation();
   return (
     <div className={s0.TrafficNow}>
       <div className="sec">
-        <div>Upload</div>
+        <div>{t('Upload')}</div>
         <div>{upStr}</div>
       </div>
       <div className="sec">
-        <div>Download</div>
+        <div>{t('Download')}</div>
         <div>{downStr}</div>
       </div>
       <div className="sec">
-        <div>Upload Total</div>
+        <div>{t('Upload Total')}</div>
         <div>{upTotal}</div>
       </div>
       <div className="sec">
-        <div>Download Total</div>
+        <div>{t('Download Total')}</div>
         <div>{dlTotal}</div>
       </div>
       <div className="sec">
-        <div>Active Connections</div>
+        <div>{t('Active Connections')}</div>
         <div>{connNumber}</div>
       </div>
     </div>

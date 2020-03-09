@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import ContentHeader from './ContentHeader';
 import ConnectionTable from './ConnectionTable';
 import useRemainingViewPortHeight from '../hooks/useRemainingViewPortHeight';
@@ -96,19 +97,20 @@ function Conn({ apiConfig }) {
   useEffect(() => {
     return connAPI.fetchData(apiConfig, read);
   }, [apiConfig, read]);
+  let { t } = useTranslation();
   return (
     <div>
-      <ContentHeader title="Connections" />
+      <ContentHeader title={t('Connections')} />
       <Tabs>
         <TabList>
           <Tab>
-            <span>Active</span>
+            <span>{t('Active')}</span>
             <span className={s.connQty}>
               <ConnQty qty={conns.length} />
             </span>
           </Tab>
           <Tab>
-            <span>Closed</span>
+            <span>{t('Closed')}</span>
             <span className={s.connQty}>
               <ConnQty qty={closedConns.length} />
             </span>
@@ -128,7 +130,7 @@ function Conn({ apiConfig }) {
               <>{renderTableOrPlaceholder(conns)}</>
               <div className="fabgrp">
                 <Button
-                  text="Close"
+                  text={t('Close')}
                   start={iconClose}
                   onClick={openCloseAllModal}
                 />

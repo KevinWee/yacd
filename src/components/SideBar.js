@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Link, useLocation } from 'react-router-dom';
@@ -91,10 +92,11 @@ function SideBar({ dispatch }) {
   const switchThemeHooked = useCallback(() => {
     dispatch(switchTheme());
   }, [dispatch]);
+  let { t } = useTranslation();
   return (
     <div className={s.root}>
       <a
-        href="https://github.com/haishanh/yacd"
+        href="https://github.com/KevinWee/yacd"
         className={s.logoLink}
         target="_blank"
         rel="noopener noreferrer"
@@ -111,7 +113,7 @@ function SideBar({ dispatch }) {
             to={to}
             isActive={location.pathname === to}
             iconId={iconId}
-            labelText={labelText}
+            labelText={t(labelText)}
           />
         ))}
       </div>
