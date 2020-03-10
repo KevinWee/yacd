@@ -64,39 +64,35 @@ function Proxies({
     return () => window.removeEventListener('focus', fn, false);
   }, [fetchProxiesHooked]);
   let { t } = useTranslation();
+  let groupNamesMod = [];
+  Object.assign(groupNamesMod, groupNames);
+  if (mode === 'Rule' || mode === 'Direct') {
+    let index = groupNamesMod.indexOf('GLOBAL');
+    if (index > -1) {
+      groupNamesMod.splice(index, 1);
+    }
+  } else {
+    let index = groupNamesMod.indexOf('GLOBAL');
+    if (index > -1) {
+      groupNamesMod.splice(0, index);
+      groupNamesMod.splice(index, index + 1);
+    }
+  }
   return (
     <>
       <ContentHeader title={t('Proxies')} />
       <div>
-        {groupNames.map(groupName => {
-          if (
-            (mode === 'Rule' || mode === 'Direct') &&
-            groupName !== 'GLOBAL'
-          ) {
-            return (
-              <div className={s0.group} key={groupName}>
-                <ProxyGroup
-                  name={groupName}
-                  delay={delay}
-                  apiConfig={apiConfig}
-                  dispatch={dispatch}
-                />
-              </div>
-            );
-          } else if (mode === 'Global' && groupName === 'GLOBAL') {
-            return (
-              <div className={s0.group} key={groupName}>
-                <ProxyGroup
-                  name={groupName}
-                  delay={delay}
-                  apiConfig={apiConfig}
-                  dispatch={dispatch}
-                />
-              </div>
-            );
-          } else {
-            return <div>Unknown proxy mode or group name</div>;
-          }
+        {groupNamesMod.map(groupName => {
+          return (
+            <div className={s0.group} key={groupName}>
+              <ProxyGroup
+                name={groupName}
+                delay={delay}
+                apiConfig={apiConfig}
+                dispatch={dispatch}
+              />
+            </div>
+          );
         })}
       </div>
       <ProxyProviderList items={proxyProviders} />
