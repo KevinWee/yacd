@@ -46,7 +46,7 @@ function TrafficChart({ apiConfig, selectedChartStyleIndex }) {
         }
       ]
     }),
-    [traffic, selectedChartStyleIndex]
+    [traffic, selectedChartStyleIndex, t]
   );
 
   useLineChart(Chart, 'trafficChart', data, traffic);
