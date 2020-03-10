@@ -69,7 +69,7 @@ function Proxies({
       <ContentHeader title={t('Proxies')} />
       <div>
         {groupNames.map(groupName => {
-          if (mode == 'Rule' && groupName != 'GLOBAL') {
+          if ((mode == 'Rule' || mode == 'Direct') && groupName != 'GLOBAL') {
             return (
               <div className={s0.group} key={groupName}>
                 <ProxyGroup
