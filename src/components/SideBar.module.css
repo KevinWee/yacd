@@ -1,6 +1,7 @@
 .root {
   background: var(--color-bg-sidebar);
   position: relative;
+  min-width: 110px;
 }
 
 .logoLink {
@@ -41,7 +42,7 @@
   @media (max-width: 768px) {
     display: flex;
     justify-content: space-between;
-    overflow: scroll;
+    overflow: hidden;
   }
 }
 
