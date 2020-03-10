@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import ContentHeader from './ContentHeader';
 import TrafficChart from './TrafficChart';
 import TrafficNow from './TrafficNow';

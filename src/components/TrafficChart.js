@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { fetchData } from '../api/traffic';
 import useLineChart from '../hooks/useLineChart';
 import { connect } from './StateProvider';

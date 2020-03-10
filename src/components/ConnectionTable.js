@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { ChevronDown } from 'react-feather';
 import prettyBytes from '../misc/pretty-bytes';
 import { formatDistance } from 'date-fns';

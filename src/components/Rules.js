@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import Button from './Button';
 import { FixedSizeList as List, areEqual } from 'react-window';
 import { RotateCw } from 'react-feather';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { connect, useStoreActions } from './StateProvider';
 import { getConfigs } from '../store/configs';
 
@@ -69,7 +69,10 @@ function Proxies({
       <ContentHeader title={t('Proxies')} />
       <div>
         {groupNames.map(groupName => {
-          if ((mode == 'Rule' || mode == 'Direct') && groupName != 'GLOBAL') {
+          if (
+            (mode === 'Rule' || mode === 'Direct') &&
+            groupName !== 'GLOBAL'
+          ) {
             return (
               <div className={s0.group} key={groupName}>
                 <ProxyGroup
@@ -80,7 +83,7 @@ function Proxies({
                 />
               </div>
             );
-          } else if (mode == 'Global' && groupName == 'GLOBAL') {
+          } else if (mode === 'Global' && groupName === 'GLOBAL') {
             return (
               <div className={s0.group} key={groupName}>
                 <ProxyGroup
