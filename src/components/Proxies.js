@@ -94,6 +94,8 @@ function Proxies({
                 />
               </div>
             );
+          } else {
+            retrun(<div>Unknown proxy mode or group name</div>);
           }
         })}
       </div>
