@@ -80,7 +80,7 @@ function Logs({ dispatch, logLevel, apiConfig, logs }) {
   const [refLogsContainer, containerHeight] = useRemainingViewPortHeight();
   let { t } = useTranslation();
   if (listRef.current) {
-    let timer = setTimeout(() => {
+    setTimeout(() => {
       listRef.current.scrollToItem(logs.length);
     }, 100);
   }
