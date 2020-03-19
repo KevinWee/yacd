@@ -28,6 +28,7 @@ const colors = {
   warning: '#b99105',
   error: '#c11c1c'
 };
+const listRef = React.createRef();
 
 function LogLine({ time, even, payload, type }) {
   const className = cx({ even }, s0.log);
@@ -78,6 +79,11 @@ function Logs({ dispatch, logLevel, apiConfig, logs }) {
   }, [hostname, port, secret, logLevel, appendLogInternal]);
   const [refLogsContainer, containerHeight] = useRemainingViewPortHeight();
   let { t } = useTranslation();
+  if (listRef.current) {
+    let timer = setTimeout(() => {
+      listRef.current.scrollToItem(logs.length);
+    }, 100);
+  }
   return (
     <div>
       <ContentHeader title={t('Logs')} />
@@ -91,11 +97,12 @@ function Logs({ dispatch, logLevel, apiConfig, logs }) {
             <div className={s0.logPlaceholderIcon}>
               <SvgYacd width={200} height={200} />
             </div>
-            <div>{t('No logs yet, hang tight...')}</div>
+            <div>{t('No logs yet')}</div>
           </div>
         ) : (
           <div className={s0.logsWrapper}>
             <List
+              ref={listRef}
               height={containerHeight - paddingBottom}
               width="100%"
               itemCount={logs.length}

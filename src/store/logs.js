@@ -19,7 +19,8 @@ export const getLogsForDisplay = createSelector(
         x.push(logs[i]);
       }
     }
-
+    //逆序排序后再逆序
+    x.reverse();
     if (searchText === '') return x;
     return x.filter(r => r.payload.toLowerCase().indexOf(searchText) >= 0);
   }

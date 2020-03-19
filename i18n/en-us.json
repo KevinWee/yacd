@@ -23,6 +23,8 @@
     "Active":"Active",
     "Closed":"Closed",
     "Host":"Host",
+    "Download Speed":"Download Speed",
+    "Upload Speed":"Upload Speed",
     "Network":"Network",
     "Type":"Type",
     "Chains":"Chains",
@@ -44,5 +46,5 @@
     "Latency Test URL":"Latency Test URL",
     "Action":"Action",
     "Log out":"Log out",
-    "No logs yet, hang tight...":"No logs yet, hang tight..."
+    "No logs yet":"No logs yet, hang tight..."
 }

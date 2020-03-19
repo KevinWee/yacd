@@ -23,6 +23,8 @@
     "Active":"活动",
     "Closed":"已关闭",
     "Host":"域名",
+    "Download Speed":"下载速率",
+    "Upload Speed":"上传速率",
     "Network":"网络",
     "Type":"类型",
     "Chains":"节点链",
@@ -44,5 +46,5 @@
     "Latency Test URL":"测速 URL",
     "Action":"操作",
     "Log out":"注销",
-    "No logs yet, hang tight...":"还没有收到日志，再稍等一下吧..."
+    "No logs yet":"还没有收到日志，再稍等一下吧..."
 }
