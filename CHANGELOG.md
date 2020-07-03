@@ -1,5 +1,121 @@
 # Changelog
 
+## [0.1.25](https://github.com/haishanh/yacd/compare/v0.1.24...v0.1.25) (2020-07-01)
+
+Added:
+
+- support mixed-port
+
+## [0.1.24](https://github.com/haishanh/yacd/compare/v0.1.23...v0.1.24) (2020-06-22)
+
+Fixed:
+
+- fix can not type in Chinese in proxy text filter input
+
+## [0.1.23](https://github.com/haishanh/yacd/compare/v0.1.22...v0.1.23) (2020-06-20)
+
+Added:
+
+- add a simple filter for proxy names
+
+Fixed:
+
+- fix color display for unavailable proxy item
+
+## [0.1.22](https://github.com/haishanh/yacd/compare/v0.1.21...v0.1.22) (2020-06-18)
+
+Fixed:
+
+- fix mode switching
+- fix broken "Hide unavailable proxies" setting
+
+Changed:
+
+- make proxy group lowest latency item when sorting by latency
+
+## [0.1.21](https://github.com/haishanh/yacd/compare/v0.1.20...v0.1.21) (2020-06-17)
+
+Fixed:
+
+- default to big latency for items with unavailable statistics when sorting
+
+Added:
+
+- a toggle to close old connections automatically when switching proxy
+- use special color for non-proxy summary view dot item
+
+## [0.1.20](https://github.com/haishanh/yacd/compare/v0.1.19...v0.1.20) (2020-06-08)
+
+Changed:
+
+- switch to Open Sans and reduce emitted font files
+
+## [0.1.19](https://github.com/haishanh/yacd/compare/v0.1.18...v0.1.19) (2020-06-07)
+
+Added:
+
+- modal prompt to close previous connections when switch proxy
+
+Fixed:
+
+- mode not display correctly due to clash API change
+
+Changed:
+
+- switch primary font family from "Merriweather Sans" to "Inter", also starting to self hosting font files
+
+## [0.1.18](https://github.com/haishanh/yacd/compare/v0.1.17...v0.1.18) (2020-06-04)
+
+Added:
+
+- test latency button for each proxy group
+
+## [0.1.17](https://github.com/haishanh/yacd/compare/v0.1.16...v0.1.17) (2020-06-03)
+
+Changed:
+
+- reduce connections table visual width
+
+## [0.1.16](https://github.com/haishanh/yacd/compare/v0.1.15...v0.1.16) (2020-05-31)
+
+Added:
+
+- filtering connections
+
+## [0.1.15](https://github.com/haishanh/yacd/compare/v0.1.14...v0.1.15) (2020-05-25)
+
+Added:
+
+- add loading status to test latency button
+
+## [0.1.14](https://github.com/haishanh/yacd/compare/v0.1.13...v0.1.14) (2020-05-17)
+
+Added:
+
+- button to pause connection refresh
+
+Fixed:
+
+- sorting option accessibility issue due to incorrect background in dark mode
+
+## [0.1.13](https://github.com/haishanh/yacd/compare/v0.1.12...v0.1.13) (2020-05-01)
+
+Changed:
+
+- use color icons in sidebar (experimental)
+
+## [0.1.12](https://github.com/haishanh/yacd/compare/v0.1.11...v0.1.12) (2020-04-26)
+
+Features:
+
+- allow change proxies sorting in group
+
+## [0.1.11](https://github.com/haishanh/yacd/compare/v0.1.10...v0.1.11) (2020-03-21)
+
+Features:
+
+- remembers group collapse state
+
 ## [0.1.10](https://github.com/haishanh/yacd/compare/v0.1.9...v0.1.10) (2020-03-14)
 
 Fixes:

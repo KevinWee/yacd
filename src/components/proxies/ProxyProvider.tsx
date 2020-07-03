@@ -1,47 +1,62 @@
-import React from 'react';
-import { RotateCw, Zap } from 'react-feather';
 import { formatDistance } from 'date-fns';
 import { motion } from 'framer-motion';
+import * as React from 'react';
+import { RotateCw, Zap } from 'react-feather';
 
-import { connect } from './StateProvider';
-import Collapsible from './Collapsible';
-import CollapsibleSectionHeader from './CollapsibleSectionHeader';
 import {
-  ProxyList,
-  ProxyListSummaryView,
-  filterAvailableProxiesAndSort
-} from './ProxyGroup';
-import Button from './Button';
-
-import { getClashAPIConfig } from '../store/app';
+  getClashAPIConfig,
+  getCollapsibleIsOpen,
+  getHideUnavailableProxies,
+  getProxySortBy,
+} from '../../store/app';
 import {
+  DelayMapping,
   getDelay,
-  getRtFilterSwitch,
+  healthcheckProviderByName,
   updateProviderByName,
-  healthcheckProviderByName
-} from '../store/proxies';
-
+} from '../../store/proxies';
+import Button from '../Button';
+import Collapsible from '../Collapsible';
+import CollapsibleSectionHeader from '../CollapsibleSectionHeader';
+import { connect, useStoreActions } from '../StateProvider';
+import { useFilteredAndSorted } from './hooks';
+import { ProxyList, ProxyListSummaryView } from './ProxyList';
 import s from './ProxyProvider.module.css';
 
 const { useState, useCallback } = React;
 
 type Props = {
-  name: string,
-  proxies: Array<string>,
-  type: 'Proxy' | 'Rule',
-  vehicleType: 'HTTP' | 'File' | 'Compatible',
-  updatedAt?: string,
-  dispatch: any => void
+  name: string;
+  proxies: Array<string>;
+  delay: DelayMapping;
+  hideUnavailableProxies: boolean;
+  proxySortBy: string;
+  type: 'Proxy' | 'Rule';
+  vehicleType: 'HTTP' | 'File' | 'Compatible';
+  updatedAt?: string;
+  dispatch: (x: any) => Promise<any>;
+  isOpen: boolean;
+  apiConfig: any;
 };
 
-function ProxyProvider({
+function ProxyProviderImpl({
   name,
-  proxies,
+  proxies: all,
+  delay,
+  hideUnavailableProxies,
+  proxySortBy,
   vehicleType,
   updatedAt,
+  isOpen,
   dispatch,
-  apiConfig
+  apiConfig,
 }: Props) {
+  const proxies = useFilteredAndSorted(
+    all,
+    delay,
+    hideUnavailableProxies,
+    proxySortBy
+  );
   const [isHealthcheckLoading, setIsHealthcheckLoading] = useState(false);
   const updateProvider = useCallback(
     () => dispatch(updateProviderByName(apiConfig, name)),
@@ -53,8 +68,14 @@ function ProxyProvider({
     setIsHealthcheckLoading(false);
   }, [apiConfig, dispatch, name, setIsHealthcheckLoading]);
 
-  const [isCollapsibleOpen, setCollapsibleOpen] = useState(false);
-  const toggle = useCallback(() => setCollapsibleOpen(x => !x), []);
+  const {
+    app: { updateCollapsibleIsOpen },
+  } = useStoreActions();
+
+  const toggle = useCallback(() => {
+    updateCollapsibleIsOpen('proxyProvider', name, !isOpen);
+  }, [isOpen, updateCollapsibleIsOpen, name]);
+
   const timeAgo = formatDistance(new Date(updatedAt), new Date());
   return (
     <div className={s.body}>
@@ -62,13 +83,13 @@ function ProxyProvider({
         name={name}
         toggle={toggle}
         type={vehicleType}
-        isOpen={isCollapsibleOpen}
+        isOpen={isOpen}
         qty={proxies.length}
       />
       <div className={s.updatedAt}>
         <small>Updated {timeAgo} ago</small>
       </div>
-      <Collapsible isOpen={isCollapsibleOpen}>
+      <Collapsible isOpen={isOpen}>
         <ProxyList all={proxies} />
         <div className={s.actionFooter}>
           <Button text="Update" start={<Refresh />} onClick={updateProvider} />
@@ -80,7 +101,7 @@ function ProxyProvider({
           />
         </div>
       </Collapsible>
-      <Collapsible isOpen={!isCollapsibleOpen}>
+      <Collapsible isOpen={!isOpen}>
         <ProxyListSummaryView all={proxies} />
       </Collapsible>
     </div>
@@ -89,12 +110,11 @@ function ProxyProvider({
 
 const button = {
   rest: { scale: 1 },
-  // hover: { scale: 1.1 },
-  pressed: { scale: 0.95 }
+  pressed: { scale: 0.95 },
 };
 const arrow = {
   rest: { rotate: 0 },
-  hover: { rotate: 360, transition: { duration: 0.3 } }
+  hover: { rotate: 360, transition: { duration: 0.3 } },
 };
 function Refresh() {
   return (
@@ -112,17 +132,22 @@ function Refresh() {
   );
 }
 
-const mapState = (s, { proxies }) => {
-  const filterByRt = getRtFilterSwitch(s);
+const mapState = (s, { proxies, name }) => {
+  const hideUnavailableProxies = getHideUnavailableProxies(s);
   const delay = getDelay(s);
+  const collapsibleIsOpen = getCollapsibleIsOpen(s);
   const apiConfig = getClashAPIConfig(s);
+
+  const proxySortBy = getProxySortBy(s);
+
   return {
     apiConfig,
-    proxies: filterAvailableProxiesAndSort(proxies, delay, filterByRt)
+    proxies,
+    delay,
+    hideUnavailableProxies,
+    proxySortBy,
+    isOpen: collapsibleIsOpen[`proxyProvider:${name}`],
   };
 };
 
-// const mapState = s => ({
-//   apiConfig: getClashAPIConfig(s)
-// });
-export default connect(mapState)(ProxyProvider);
+export const ProxyProvider = connect(mapState)(ProxyProviderImpl);

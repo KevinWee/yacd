@@ -1,6 +1,0 @@
-.group {
-  padding: 10px 15px;
-  @media (--breakpoint-not-small) {
-    padding: 10px 40px;
-  }
-}

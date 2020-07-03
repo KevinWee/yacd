@@ -1,27 +1,25 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 
-import { connect, useStoreActions } from './StateProvider';
-import { getConfigs, fetchConfigs, updateConfigs } from '../store/configs';
 import {
+  clearStorage,
   getClashAPIConfig,
-  getSelectedChartStyleIndex,
   getLatencyTestUrl,
-  clearStorage
+  getSelectedChartStyleIndex
 } from '../store/app';
-
+import { fetchConfigs, getConfigs, updateConfigs } from '../store/configs';
+import Button from './Button';
+import s0 from './Config.module.css';
 import ContentHeader from './ContentHeader';
+import Input, { SelfControlledInput } from './Input';
+import Selection from './Selection';
+import { connect, useStoreActions } from './StateProvider';
 import Switch from './SwitchThemed';
 import ToggleSwitch from './ToggleSwitch';
-import Input, { SelfControlledInput } from './Input';
-import Button from './Button';
-import Selection from './Selection';
 import TrafficChartSample from './TrafficChartSample';
 
-import s0 from './Config.module.css';
-
-const { useEffect, useState, useCallback, useRef } = React;
+const { useEffect, useState, useCallback, useRef, useMemo } = React;
 
 const propsList = [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }];
 
@@ -61,6 +59,13 @@ const optionsLogLevel = [
     label: 'silent',
     value: 'silent'
   }
+];
+
+const portFields = [
+  { key: 'port', label: 'HTTP Proxy Port' },
+  { key: 'socks-port', label: 'SOCKS5 Proxy Port' },
+  { key: 'mixed-port', label: 'Mixed Port' },
+  { key: 'redir-port', label: 'Redir Port' }
 ];
 
 const mapState = s => ({
@@ -124,7 +129,7 @@ function ConfigImpl({
     e => {
       const target = e.target;
       const { name } = target;
-      let { value } = target;
+      const { value } = target;
       switch (target.name) {
         case 'mode':
         case 'log-level':
@@ -156,6 +161,7 @@ function ConfigImpl({
       switch (name) {
         case 'port':
         case 'socks-port':
+        case 'mixed-port':
         case 'redir-port': {
           const num = parseInt(value, 10);
           if (num < 0 || num > 65535) return;
@@ -172,41 +178,30 @@ function ConfigImpl({
     },
     [apiConfig, dispatch, updateAppConfig]
   );
+
+  const mode = useMemo(() => {
+    const m = configState.mode;
+    return typeof m === 'string' && m[0].toUpperCase() + m.slice(1);
+  }, [configState.mode]);
+
   let { t } = useTranslation();
   return (
     <div>
       <ContentHeader title={t('Config')} />
       <div className={s0.root}>
-        <div>
-          <div className={s0.label}>{t('HTTP Proxy Port')}</div>
-          <Input
-            name="port"
-            value={configState.port}
-            onChange={handleInputOnChange}
-            onBlur={handleInputOnBlur}
-          />
-        </div>
-
-        <div>
-          <div className={s0.label}>{t('SOCKS5 Proxy Port')}</div>
-          <Input
-            name="socks-port"
-            value={configState['socks-port']}
-            onChange={handleInputOnChange}
-            onBlur={handleInputOnBlur}
-          />
-        </div>
-
-        <div>
-          <div className={s0.label}>{t('Redir Port')}</div>
-          <Input
-            name="redir-port"
-            value={configState['redir-port']}
-            onChange={handleInputOnChange}
-            onBlur={handleInputOnBlur}
-          />
-        </div>
-
+        {portFields.map(f =>
+          configState[f.key] !== undefined ? (
+            <div key={f.key}>
+              <div className={s0.label}>{t(f.label)}</div>
+              <Input
+                name={f.key}
+                value={configState[f.key]}
+                onChange={handleInputOnChange}
+                onBlur={handleInputOnBlur}
+              />
+            </div>
+          ) : null
+        )}
         <div>
           <div className={s0.label}>{t('Allow LAN')}</div>
           <Switch
@@ -221,7 +216,7 @@ function ConfigImpl({
           <ToggleSwitch
             options={optionsRule}
             name="mode"
-            value={configState.mode}
+            value={mode}
             onChange={handleInputOnChange}
           />
         </div>

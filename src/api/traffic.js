@@ -26,11 +26,10 @@ const traffic = {
   },
 
   subscribe(listener) {
-    const me = this;
     this.subscribers.push(listener);
-    return function unsubscribe() {
-      const idx = me.subscribers.indexOf(listener);
-      me.subscribers.splice(idx, 1);
+    return () => {
+      const idx = this.subscribers.indexOf(listener);
+      this.subscribers.splice(idx, 1);
     };
   }
 };

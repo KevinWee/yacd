@@ -1,21 +1,22 @@
+import './Connections.css';
+
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import ContentHeader from './ContentHeader';
-import ConnectionTable from './ConnectionTable';
+import { Pause, Play, X as IconClose } from 'react-feather';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+
+import * as connAPI from '../api/connections';
 import useRemainingViewPortHeight from '../hooks/useRemainingViewPortHeight';
 import { getClashAPIConfig } from '../store/app';
-import { X as IconClose } from 'react-feather';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import SvgYacd from './SvgYacd';
-import Button from './Button';
-import ModalCloseAllConnections from './ModalCloseAllConnections';
-import { connect } from './StateProvider';
-import * as connAPI from '../api/connections';
-
-import './Connections.css';
 import s from './Connections.module.css';
+import ConnectionTable from './ConnectionTable';
+import ContentHeader from './ContentHeader';
+import ModalCloseAllConnections from './ModalCloseAllConnections';
+import { Action, Fab, position as fabPosition } from './shared/Fab';
+import { connect } from './StateProvider';
+import SvgYacd from './SvgYacd';
+import { useTranslation } from 'react-i18next';
 
-const { useEffect, useState, useRef, useCallback, useMemo } = React;
+const { useEffect, useState, useRef, useCallback } = React;
 
 const paddingBottom = 30;
 
@@ -28,17 +29,40 @@ function arrayToIdKv(items) {
   return o;
 }
 
+function filterConns(conns, keyword) {
+  const hasSubstring = (s, pat) => s.toLowerCase().includes(pat.toLowerCase());
+
+  return !keyword
+    ? conns
+    : conns.filter(conn =>
+        [
+          conn.host,
+          conn.sourceIP,
+          conn.sourcePort,
+          conn.destinationIP,
+          conn.chains,
+          conn.rule,
+          conn.type,
+          conn.network
+        ].some(field => hasSubstring(field, keyword))
+      );
+}
+
 function formatConnectionDataItem(i, prevKv) {
   const { id, metadata, upload, download, start, chains, rule } = i;
-  let { host, destinationPort, destinationIP } = metadata;
+  // eslint-disable-next-line prefer-const
+  let {
+    host,
+    destinationPort,
+    destinationIP,
+    network,
+    type,
+    sourceIP,
+    sourcePort
+  } = metadata;
   // host could be an empty string if it's direct IP connection
   if (host === '') host = destinationIP;
-  const metadataNext = {
-    ...metadata,
-    // merge host and destinationPort into one column
-    host: host + ':' + destinationPort
-  };
-  // const started = formatDistance(new Date(start), now);
+
   const ret = {
     id,
     upload,
@@ -46,7 +70,10 @@ function formatConnectionDataItem(i, prevKv) {
     start: 0 - new Date(start),
     chains: chains.reverse().join(' / '),
     rule,
-    ...metadataNext
+    ...metadata,
+    host: `${host}:${destinationPort}`,
+    type: `${type}(${network})`,
+    source: `${sourceIP}:${sourcePort}`
   };
   const prev = prevKv[id];
   ret.downloadSpeedCurr = download - (prev ? prev.download : 0);
@@ -72,17 +99,23 @@ function Conn({ apiConfig }) {
   const [refContainer, containerHeight] = useRemainingViewPortHeight();
   const [conns, setConns] = useState([]);
   const [closedConns, setClosedConns] = useState([]);
+  const [filterKeyword, setFilterKeyword] = useState('');
+  const filteredConns = filterConns(conns, filterKeyword);
+  const filteredClosedConns = filterConns(closedConns, filterKeyword);
   const [isCloseAllModalOpen, setIsCloseAllModalOpen] = useState(false);
   const openCloseAllModal = useCallback(() => setIsCloseAllModalOpen(true), []);
   const closeCloseAllModal = useCallback(
     () => setIsCloseAllModalOpen(false),
     []
   );
+  const [isRefreshPaused, setIsRefreshPaused] = useState(false);
+  const toggleIsRefreshPaused = useCallback(() => {
+    setIsRefreshPaused(x => !x);
+  }, []);
   const closeAllConnections = useCallback(() => {
     connAPI.closeAllConnections(apiConfig);
     closeCloseAllModal();
   }, [apiConfig, closeCloseAllModal]);
-  const iconClose = useMemo(() => <IconClose width={16} />, []);
   const prevConnsRef = useRef(conns);
   const read = useCallback(
     ({ connections }) => {
@@ -99,14 +132,18 @@ function Conn({ apiConfig }) {
       });
       // if previous connections and current connections are both empty
       // arrays, we wont update state to avaoid rerender
-      if (x && (x.length !== 0 || prevConnsRef.current.length !== 0)) {
+      if (
+        x &&
+        (x.length !== 0 || prevConnsRef.current.length !== 0) &&
+        !isRefreshPaused
+      ) {
         prevConnsRef.current = x;
         setConns(x);
       } else {
         prevConnsRef.current = x;
       }
     },
-    [setConns]
+    [setConns, isRefreshPaused]
   );
   useEffect(() => {
     return connAPI.fetchData(apiConfig, read);
@@ -116,20 +153,38 @@ function Conn({ apiConfig }) {
     <div>
       <ContentHeader title={t('Connections')} />
       <Tabs>
-        <TabList>
-          <Tab>
-            <span>{t('Active')}</span>
-            <span className={s.connQty}>
-              <ConnQty qty={conns.length} />
-            </span>
-          </Tab>
-          <Tab>
-            <span>{t('Closed')}</span>
-            <span className={s.connQty}>
-              <ConnQty qty={closedConns.length} />
-            </span>
-          </Tab>
-        </TabList>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between'
+          }}
+        >
+          <TabList>
+            <Tab>
+              <span>{t('Active')}</span>
+              <span className={s.connQty}>
+                <ConnQty qty={filteredConns.length} />
+              </span>
+            </Tab>
+            <Tab>
+              <span>{t('Closed')}</span>
+              <span className={s.connQty}>
+                <ConnQty qty={filteredClosedConns.length} />
+              </span>
+            </Tab>
+          </TabList>
+          <div className={s.inputWrapper}>
+            <input
+              type="text"
+              name="filter"
+              autoComplete="off"
+              className={s.input}
+              placeholder="Filter"
+              onChange={e => setFilterKeyword(e.target.value)}
+            />
+          </div>
+        </div>
         <div
           ref={refContainer}
           style={{ padding: 30, paddingBottom, paddingTop: 0 }}
@@ -141,16 +196,31 @@ function Conn({ apiConfig }) {
             }}
           >
             <TabPanel>
-              <>{renderTableOrPlaceholder(conns)}</>
-              <div className="fabgrp">
-                <Button
-                  text={t('Close')}
-                  start={iconClose}
+              <>{renderTableOrPlaceholder(filteredConns)}</>
+              <Fab
+                icon={
+                  isRefreshPaused ? <Play size={16} /> : <Pause size={16} />
+                }
+                mainButtonStyles={
+                  isRefreshPaused
+                    ? {
+                        background: '#e74c3c'
+                      }
+                    : {}
+                }
+                position={fabPosition}
+                text={t(isRefreshPaused ? 'Resume Refresh' : 'Pause Refresh')}
+                onClick={toggleIsRefreshPaused}
+              >
+                <Action
+                  text="Close All Connections"
                   onClick={openCloseAllModal}
-                />
-              </div>
+                >
+                  <IconClose size={10} />
+                </Action>
+              </Fab>
             </TabPanel>
-            <TabPanel>{renderTableOrPlaceholder(closedConns)}</TabPanel>
+            <TabPanel>{renderTableOrPlaceholder(filteredClosedConns)}</TabPanel>
           </div>
         </div>
         <ModalCloseAllConnections

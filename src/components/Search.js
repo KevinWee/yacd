@@ -1,8 +1,6 @@
-import React, { useState, useMemo, useCallback } from 'react';
-
-import { Search as SearchIcon } from 'react-feather';
-
 import debounce from 'lodash-es/debounce';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Search as SearchIcon } from 'react-feather';
 
 import s0 from './Search.module.css';
 

@@ -1,12 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import prettyBytes from '../misc/pretty-bytes';
-
-import { connect } from './StateProvider';
-import { getClashAPIConfig } from '../store/app';
-import { fetchData } from '../api/traffic';
 import * as connAPI from '../api/connections';
-
+import { fetchData } from '../api/traffic';
+import prettyBytes from '../misc/pretty-bytes';
+import { getClashAPIConfig } from '../store/app';
+import { connect } from './StateProvider';
 import s0 from './TrafficNow.module.css';
 
 const { useState, useEffect, useCallback } = React;

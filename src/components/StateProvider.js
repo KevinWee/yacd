@@ -1,5 +1,5 @@
-import React from 'react';
 import produce, * as immer from 'immer';
+import React from 'react';
 
 const {
   createContext,
@@ -88,8 +88,8 @@ export function connect(mapStateToProps) {
 
 // steal from https://github.com/reduxjs/redux/blob/master/src/bindActionCreators.ts
 function bindAction(action, dispatch) {
-  return function() {
-    return dispatch(action.apply(this, arguments));
+  return function(...args) {
+    return dispatch(action.apply(this, args));
   };
 }
 
@@ -99,6 +99,8 @@ function bindActions(actions, dispatch) {
     const action = actions[key];
     if (typeof action === 'function') {
       boundActions[key] = bindAction(action, dispatch);
+    } else if (typeof action === 'object') {
+      boundActions[key] = bindActions(action, dispatch);
     }
   }
   return boundActions;

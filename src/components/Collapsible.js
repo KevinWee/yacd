@@ -1,6 +1,6 @@
+import { motion } from 'framer-motion';
 import React from 'react';
 import ResizeObserver from 'resize-observer-polyfill';
-import { motion } from 'framer-motion';
 
 const { memo, useState, useRef, useEffect } = React;
 

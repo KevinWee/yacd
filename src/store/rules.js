@@ -1,6 +1,7 @@
-import * as rulesAPI from '../api/rules';
 import invariant from 'invariant';
 import { createSelector } from 'reselect';
+
+import * as rulesAPI from '../api/rules';
 
 export const getAllRules = s => s.rules.allRules;
 export const getSearchText = s => s.rules.searchText;

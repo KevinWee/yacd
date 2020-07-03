@@ -1,6 +1,6 @@
+import cx from 'clsx';
+import { array, func, number } from 'prop-types';
 import React from 'react';
-import { func, array, number } from 'prop-types';
-import cx from 'classnames';
 
 import s from './Selection.module.css';
 

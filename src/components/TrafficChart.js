@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { fetchData } from '../api/traffic';
 import useLineChart from '../hooks/useLineChart';
-import { connect } from './StateProvider';
-import { getClashAPIConfig, getSelectedChartStyleIndex } from '../store/app';
+import { useTranslation } from 'react-i18next';
 import {
   chartJSResource,
-  commonDataSetProps,
-  chartStyles
+  chartStyles,
+  commonDataSetProps
 } from '../misc/chart';
+import { getClashAPIConfig, getSelectedChartStyleIndex } from '../store/app';
+import { connect } from './StateProvider';
 
 const chartWrapperStyle = {
   // make chartjs chart responsive

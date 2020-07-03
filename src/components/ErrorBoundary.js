@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+
+import { deriveMessageFromError } from '../misc/errors';
 import { getSentry } from '../misc/sentry';
 import ErrorBoundaryFallback from './ErrorBoundaryFallback';
-import { deriveMessageFromError } from '../misc/errors';
 
 // XXX this is no Hook equivalents for componentDidCatch
 // we have to use class for now

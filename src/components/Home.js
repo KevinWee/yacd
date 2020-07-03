@@ -1,10 +1,10 @@
 import React, { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import ContentHeader from './ContentHeader';
+import s0 from './Home.module.css';
+import Loading from './Loading';
 import TrafficChart from './TrafficChart';
 import TrafficNow from './TrafficNow';
-import Loading from './Loading';
-import s0 from './Home.module.css';
 
 export default function Home() {
   let { t } = useTranslation();

@@ -2,8 +2,8 @@ import { getURLAndInit } from '../misc/request-helper';
 
 const endpoint = '/connections';
 
-let fetched = false;
-let subscribers = [];
+const fetched = false;
+const subscribers = [];
 
 // see also https://github.com/Dreamacro/clash/blob/dev/constant/metadata.go#L41
 type UUID = string;
@@ -80,6 +80,17 @@ function subscribe(listener) {
 async function closeAllConnections(apiConfig) {
   const { url, init } = getURLAndInit(apiConfig);
   return await fetch(url + endpoint, { ...init, method: 'DELETE' });
+}
+
+export async function fetchConns(apiConfig) {
+  const { url, init } = getURLAndInit(apiConfig);
+  return await fetch(url + endpoint, { ...init });
+}
+
+export async function closeConnById(apiConfig, id) {
+  const { url: baseURL, init } = getURLAndInit(apiConfig);
+  const url = `${baseURL}${endpoint}/${id}`;
+  return await fetch(url, { ...init, method: 'DELETE' });
 }
 
 export { fetchData, closeAllConnections };

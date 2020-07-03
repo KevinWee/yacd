@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { commonChartOptions } from '../misc/chart';
 
 const { useEffect } = React;

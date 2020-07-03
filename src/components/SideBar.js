@@ -1,26 +1,44 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
-import cx from 'classnames';
+import cx from 'clsx';
 import { motion } from 'framer-motion';
+import PropTypes from 'prop-types';
+import React from 'react';
+// import { Command, Activity, Globe, Link2, Settings, File } from 'react-feather';
+import {
+  FcAreaChart,
+  FcDocument,
+  FcGlobe,
+  FcLink,
+  FcRuler,
+  FcSettings
+} from 'react-icons/fc';
 import { Link, useLocation } from 'react-router-dom';
-import { Command, Activity, Globe, Link2, Settings, File } from 'react-feather';
 
-import { connect } from './StateProvider';
 import { getTheme, switchTheme } from '../store/app';
-
-import SvgYacd from './SvgYacd';
 import s from './SideBar.module.css';
+import { connect } from './StateProvider';
+import SvgYacd from './SvgYacd';
+import { useTranslation } from 'react-i18next';
 
 const { useCallback } = React;
 
+// testing color icons
+
+// const icons = {
+//   activity: Activity,
+//   globe: Globe,
+//   command: Command,
+//   file: File,
+//   settings: Settings,
+//   link: Link2
+// };
+
 const icons = {
-  activity: Activity,
-  globe: Globe,
-  command: Command,
-  file: File,
-  settings: Settings,
-  link: Link2
+  activity: FcAreaChart,
+  globe: FcGlobe,
+  command: FcRuler,
+  file: FcDocument,
+  settings: FcSettings,
+  link: FcLink
 };
 
 const SideBarRow = React.memo(function SideBarRow({

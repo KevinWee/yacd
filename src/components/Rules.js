@@ -1,21 +1,19 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import Button from './Button';
-import { FixedSizeList as List, areEqual } from 'react-window';
 import { RotateCw } from 'react-feather';
+import { areEqual, FixedSizeList as List } from 'react-window';
 
-import { connect } from './StateProvider';
+import useRemainingViewPortHeight from '../hooks/useRemainingViewPortHeight';
 import { getClashAPIConfig } from '../store/app';
+import { fetchRules, fetchRulesOnce, getRules } from '../store/rules';
 import ContentHeader from './ContentHeader';
 import Rule from './Rule';
 import RuleSearch from './RuleSearch';
-import useRemainingViewPortHeight from '../hooks/useRemainingViewPortHeight';
-
-import { getRules, fetchRules, fetchRulesOnce } from '../store/rules';
+import { Fab, position as fabPosition } from './shared/Fab';
+import { connect } from './StateProvider';
+import { useTranslation } from 'react-i18next';
 
 const { memo, useEffect, useMemo, useCallback } = React;
 
-// import s from './Rules.module.css';
 const paddingBottom = 30;
 
 function itemKey(index, data) {
@@ -65,13 +63,13 @@ function Rules({ dispatch, apiConfig, rules }) {
           {Row}
         </List>
       </div>
-      <div className="fabgrp">
-        <Button
-          text={t('Refresh')}
-          start={refreshIcon}
-          onClick={fetchRulesHooked}
-        />
-      </div>
+
+      <Fab
+        icon={refreshIcon}
+        text={t('Refresh')}
+        onClick={fetchRulesHooked}
+        position={fabPosition}
+      />
     </div>
   );
 }

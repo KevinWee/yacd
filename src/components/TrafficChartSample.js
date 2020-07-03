@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
+
 import useLineChart from '../hooks/useLineChart';
 import {
   chartJSResource,
-  commonDataSetProps,
-  chartStyles
+  chartStyles,
+  commonDataSetProps
 } from '../misc/chart';
 
 const extraChartOptions = {

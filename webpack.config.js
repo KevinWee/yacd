@@ -1,5 +1,3 @@
-'use strict';
-
 const path = require('path');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -7,9 +5,10 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const HTMLPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ReactRefreshWebpackPlugin = require('@hsjs/react-refresh-webpack-plugin');
-// const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 const pkg = require('./package.json');
 
@@ -19,7 +18,7 @@ const isDev = process.env.NODE_ENV !== 'production';
 const html = new HTMLPlugin({
   title: 'yacd - Yet Another Clash Dashboard',
   template: 'src/index.template.ejs',
-  inject: false,
+  scriptLoading: 'defer',
   filename: 'index.html'
 });
 
@@ -64,7 +63,12 @@ const bundleAnalyzerPlugin = new BundleAnalyzerPlugin({
 const plugins = [
   html,
   definePlugin,
-  new CopyPlugin([{ from: 'assets/*', flatten: true }]),
+  new ForkTsCheckerWebpackPlugin(),
+  new ForkTsCheckerNotifierWebpackPlugin({
+    title: 'TypeScript',
+    excludeWarnings: false
+  }),
+  new CopyPlugin({ patterns: [{ from: 'assets/*', flatten: true }] }),
   new CleanWebpackPlugin(),
   // chart.js requires moment
   // and we don't need locale stuff in moment
@@ -83,16 +87,31 @@ module.exports = {
     // app: ['react-hot-loader/patch', './src/app.js']
     app: ['./src/app.js']
   },
+  context: __dirname,
   output: {
     path: path.resolve(__dirname, 'public'),
     filename: isDev ? '[name].js' : '[name].[contenthash].js',
     publicPath: ''
   },
   mode: isDev ? 'development' : 'production',
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js'],
+    alias: {
+      src: path.resolve(__dirname, 'src')
+    }
+  },
   module: {
     rules: [
+      // {
+      //   test: /\.tsx?$/,
+      //   loader: 'ts-loader',
+      //   options: {
+      //     // disable type checker - we will use it in fork plugin
+      //     transpileOnly: true,
+      //   },
+      // },
       {
-        test: /\.js$/,
+        test: /\.[tj]sx?$/,
         exclude: /node_modules/,
         use: { loader: 'babel-loader', options: { cacheDirectory: true } }
       },

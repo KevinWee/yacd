@@ -1,11 +1,10 @@
+import cx from 'clsx';
 import React from 'react';
 import { ChevronDown } from 'react-feather';
-import cx from 'classnames';
 
-import { SectionNameType } from './shared/Basic';
 import Button from './Button';
-
 import s from './CollapsibleSectionHeader.module.css';
+import { SectionNameType } from './shared/Basic';
 
 type Props = {
   name: string,
@@ -24,7 +23,7 @@ export default function Header({ name, type, toggle, isOpen, qty }: Props) {
 
       {typeof qty === 'number' ? <span className={s.qty}>{qty}</span> : null}
 
-      <Button kind="minimal" onClick={toggle}>
+      <Button kind="minimal" onClick={toggle} className={s.btn}>
         <span className={cx(s.arrow, { [s.isOpen]: isOpen })}>
           <ChevronDown size={20} />
         </span>
