@@ -16,7 +16,7 @@ type ConnectionItem = {
     destinationIP: string,
     sourcePort: string,
     destinationPort: string,
-    host: string
+    host: string,
   },
   upload: number,
   download: number,
@@ -24,12 +24,12 @@ type ConnectionItem = {
   start: string,
   chains: Array<string>,
   // e.g. 'Match', 'DomainKeyword'
-  rule: string
+  rule: string,
 };
 type ConnectionsData = {
   downloadTotal: number,
   uploadTotal: number,
-  connections: Array<ConnectionItem>
+  connections: Array<ConnectionItem>,
 };
 
 function appendData(s) {
@@ -40,14 +40,14 @@ function appendData(s) {
     // eslint-disable-next-line no-console
     console.log('JSON.parse error', JSON.parse(s));
   }
-  subscribers.forEach(f => f(o));
+  subscribers.forEach((f) => f(o));
 }
 
 function getWsUrl(apiConfig) {
   const { hostname, port, secret } = apiConfig;
   let qs = '';
   if (typeof secret === 'string' && secret !== '') {
-    qs += '?token=' + secret;
+    qs += '?token=' + encodeURIComponent(secret);
   }
   return `ws://${hostname}:${port}${endpoint}${qs}`;
 }
@@ -60,10 +60,10 @@ function fetchData(apiConfig, listener) {
   wsState = 1;
   const url = getWsUrl(apiConfig);
   const ws = new WebSocket(url);
-  ws.addEventListener('error', function(_ev) {
+  ws.addEventListener('error', function (_ev) {
     wsState = 3;
   });
-  ws.addEventListener('message', function(event) {
+  ws.addEventListener('message', function (event) {
     appendData(event.data);
   });
   if (listener) return subscribe(listener);
