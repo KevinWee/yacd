@@ -1,6 +1,7 @@
 import cx from 'clsx';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { areEqual, FixedSizeList as List } from 'react-window';
 
 import { fetchLogs } from '../api/logs';
@@ -14,7 +15,6 @@ import LogSearch from './LogSearch';
 import { connect } from './StateProvider';
 // import { useStoreState, useActions } from '../misc/store';
 import SvgYacd from './SvgYacd';
-import { useTranslation } from 'react-i18next';
 
 const { useCallback, memo, useEffect } = React;
 
@@ -25,7 +25,7 @@ const colors = {
   info: '#454545',
   // info: '#147d14',
   warning: '#b99105',
-  error: '#c11c1c'
+  error: '#c11c1c',
 };
 const listRef = React.createRef();
 
@@ -48,7 +48,7 @@ LogLine.propTypes = {
   time: PropTypes.string,
   even: PropTypes.bool,
   payload: PropTypes.string,
-  type: PropTypes.string
+  type: PropTypes.string,
 };
 
 function itemKey(index, data) {
@@ -68,7 +68,7 @@ const Row = memo(({ index, style, data }) => {
 function Logs({ dispatch, logLevel, apiConfig, logs }) {
   const { hostname, port, secret } = apiConfig;
   const appendLogInternal = useCallback(
-    log => {
+    (log) => {
       dispatch(appendLog(log));
     },
     [dispatch]
@@ -118,10 +118,10 @@ function Logs({ dispatch, logLevel, apiConfig, logs }) {
   );
 }
 
-const mapState = s => ({
+const mapState = (s) => ({
   logs: getLogsForDisplay(s),
   logLevel: getLogLevel(s),
-  apiConfig: getClashAPIConfig(s)
+  apiConfig: getClashAPIConfig(s),
 });
 
 export default connect(mapState)(Logs);

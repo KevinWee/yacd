@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+
 import * as connAPI from '../api/connections';
 import { fetchData } from '../api/traffic';
 import prettyBytes from '../misc/pretty-bytes';
@@ -9,8 +10,8 @@ import s0 from './TrafficNow.module.css';
 
 const { useState, useEffect, useCallback } = React;
 
-const mapState = s => ({
-  apiConfig: getClashAPIConfig(s)
+const mapState = (s) => ({
+  apiConfig: getClashAPIConfig(s),
 });
 export default connect(mapState)(TrafficNow);
 
@@ -47,10 +48,10 @@ function TrafficNow({ apiConfig }) {
 function useSpeed(apiConfig) {
   const [speed, setSpeed] = useState({ upStr: '0 B/s', downStr: '0 B/s' });
   useEffect(() => {
-    return fetchData(apiConfig).subscribe(o =>
+    return fetchData(apiConfig).subscribe((o) =>
       setSpeed({
         upStr: prettyBytes(o.up) + '/s',
-        downStr: prettyBytes(o.down) + '/s'
+        downStr: prettyBytes(o.down) + '/s',
       })
     );
   }, [apiConfig]);
@@ -61,14 +62,14 @@ function useConnection(apiConfig) {
   const [state, setState] = useState({
     upTotal: '0 B',
     dlTotal: '0 B',
-    connNumber: 0
+    connNumber: 0,
   });
   const read = useCallback(
     ({ downloadTotal, uploadTotal, connections }) => {
       setState({
         upTotal: prettyBytes(uploadTotal),
         dlTotal: prettyBytes(downloadTotal),
-        connNumber: connections.length
+        connNumber: connections.length,
       });
     },
     [setState]

@@ -1,5 +1,6 @@
 import React from 'react';
 import { RotateCw } from 'react-feather';
+import { useTranslation } from 'react-i18next';
 import { queryCache, useQuery } from 'react-query';
 import { areEqual, VariableSizeList } from 'react-window';
 import { useRecoilState } from 'recoil';
@@ -16,7 +17,6 @@ import Rule from './Rule';
 import s from './Rules.module.css';
 import { Fab, position as fabPosition } from './shared/Fab';
 import { connect } from './StateProvider';
-import { useTranslation } from 'react-i18next';
 
 const { memo, useMemo, useCallback } = React;
 

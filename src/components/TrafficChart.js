@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { fetchData } from '../api/traffic';
 import useLineChart from '../hooks/useLineChart';
-import { useTranslation } from 'react-i18next';
 import {
   chartJSResource,
   chartStyles,
-  commonDataSetProps
+  commonDataSetProps,
 } from '../misc/chart';
 import { getClashAPIConfig, getSelectedChartStyleIndex } from '../store/app';
 import { connect } from './StateProvider';
@@ -13,12 +14,12 @@ import { connect } from './StateProvider';
 const chartWrapperStyle = {
   // make chartjs chart responsive
   position: 'relative',
-  maxWidth: 1000
+  maxWidth: 1000,
 };
 
-const mapState = s => ({
+const mapState = (s) => ({
   apiConfig: getClashAPIConfig(s),
-  selectedChartStyleIndex: getSelectedChartStyleIndex(s)
+  selectedChartStyleIndex: getSelectedChartStyleIndex(s),
 });
 
 export default connect(mapState)(TrafficChart);
@@ -36,15 +37,15 @@ function TrafficChart({ apiConfig, selectedChartStyleIndex }) {
           ...commonDataSetProps,
           ...chartStyles[selectedChartStyleIndex].up,
           label: t('Upload'),
-          data: traffic.up
+          data: traffic.up,
         },
         {
           ...commonDataSetProps,
           ...chartStyles[selectedChartStyleIndex].down,
           label: t('Download'),
-          data: traffic.down
-        }
-      ]
+          data: traffic.down,
+        },
+      ],
     }),
     [traffic, selectedChartStyleIndex, t]
   );

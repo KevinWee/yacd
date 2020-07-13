@@ -2,6 +2,7 @@ import './Connections.css';
 
 import React from 'react';
 import { Pause, Play, X as IconClose } from 'react-feather';
+import { useTranslation } from 'react-i18next';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 
 import * as connAPI from '../api/connections';
@@ -14,7 +15,6 @@ import ModalCloseAllConnections from './ModalCloseAllConnections';
 import { Action, Fab, position as fabPosition } from './shared/Fab';
 import { connect } from './StateProvider';
 import SvgYacd from './SvgYacd';
-import { useTranslation } from 'react-i18next';
 
 const { useEffect, useState, useRef, useCallback } = React;
 
@@ -34,7 +34,7 @@ function filterConns(conns, keyword) {
 
   return !keyword
     ? conns
-    : conns.filter(conn =>
+    : conns.filter((conn) =>
         [
           conn.host,
           conn.sourceIP,
@@ -43,8 +43,8 @@ function filterConns(conns, keyword) {
           conn.chains,
           conn.rule,
           conn.type,
-          conn.network
-        ].some(field => hasSubstring(field, keyword))
+          conn.network,
+        ].some((field) => hasSubstring(field, keyword))
       );
 }
 
@@ -58,7 +58,7 @@ function formatConnectionDataItem(i, prevKv) {
     network,
     type,
     sourceIP,
-    sourcePort
+    sourcePort,
   } = metadata;
   // host could be an empty string if it's direct IP connection
   if (host === '') host = destinationIP;
@@ -73,7 +73,7 @@ function formatConnectionDataItem(i, prevKv) {
     ...metadata,
     host: `${host}:${destinationPort}`,
     type: `${type}(${network})`,
-    source: `${sourceIP}:${sourcePort}`
+    source: `${sourceIP}:${sourcePort}`,
   };
   const prev = prevKv[id];
   ret.downloadSpeedCurr = download - (prev ? prev.download : 0);
@@ -110,7 +110,7 @@ function Conn({ apiConfig }) {
   );
   const [isRefreshPaused, setIsRefreshPaused] = useState(false);
   const toggleIsRefreshPaused = useCallback(() => {
-    setIsRefreshPaused(x => !x);
+    setIsRefreshPaused((x) => !x);
   }, []);
   const closeAllConnections = useCallback(() => {
     connAPI.closeAllConnections(apiConfig);
@@ -120,13 +120,15 @@ function Conn({ apiConfig }) {
   const read = useCallback(
     ({ connections }) => {
       const prevConnsKv = arrayToIdKv(prevConnsRef.current);
-      const x = connections.map(c => formatConnectionDataItem(c, prevConnsKv));
+      const x = connections.map((c) =>
+        formatConnectionDataItem(c, prevConnsKv)
+      );
       const closed = [];
       for (const c of prevConnsRef.current) {
-        const idx = x.findIndex(conn => conn.id === c.id);
+        const idx = x.findIndex((conn) => conn.id === c.id);
         if (idx < 0) closed.push(c);
       }
-      setClosedConns(prev => {
+      setClosedConns((prev) => {
         // keep max 100 entries
         return [...closed, ...prev].slice(0, 101);
       });
@@ -157,7 +159,7 @@ function Conn({ apiConfig }) {
           style={{
             display: 'flex',
             flexWrap: 'wrap',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
           }}
         >
           <TabList>
@@ -181,7 +183,7 @@ function Conn({ apiConfig }) {
               autoComplete="off"
               className={s.input}
               placeholder="Filter"
-              onChange={e => setFilterKeyword(e.target.value)}
+              onChange={(e) => setFilterKeyword(e.target.value)}
             />
           </div>
         </div>
@@ -192,7 +194,7 @@ function Conn({ apiConfig }) {
           <div
             style={{
               height: containerHeight - paddingBottom,
-              overflow: 'auto'
+              overflow: 'auto',
             }}
           >
             <TabPanel>
@@ -204,7 +206,7 @@ function Conn({ apiConfig }) {
                 mainButtonStyles={
                   isRefreshPaused
                     ? {
-                        background: '#e74c3c'
+                        background: '#e74c3c',
                       }
                     : {}
                 }
@@ -233,8 +235,8 @@ function Conn({ apiConfig }) {
   );
 }
 
-const mapState = s => ({
-  apiConfig: getClashAPIConfig(s)
+const mapState = (s) => ({
+  apiConfig: getClashAPIConfig(s),
 });
 
 export default connect(mapState)(Conn);

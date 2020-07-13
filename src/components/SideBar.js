@@ -2,6 +2,7 @@ import cx from 'clsx';
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 // import { Command, Activity, Globe, Link2, Settings, File } from 'react-feather';
 import {
   FcAreaChart,
@@ -9,7 +10,7 @@ import {
   FcGlobe,
   FcLink,
   FcRuler,
-  FcSettings
+  FcSettings,
 } from 'react-icons/fc';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -17,7 +18,6 @@ import { getTheme, switchTheme } from '../store/app';
 import s from './SideBar.module.css';
 import { connect } from './StateProvider';
 import SvgYacd from './SvgYacd';
-import { useTranslation } from 'react-i18next';
 
 const { useCallback } = React;
 
@@ -38,14 +38,14 @@ const icons = {
   command: FcRuler,
   file: FcDocument,
   settings: FcSettings,
-  link: FcLink
+  link: FcLink,
 };
 
 const SideBarRow = React.memo(function SideBarRow({
   isActive,
   to,
   iconId,
-  labelText
+  labelText,
 }) {
   const Comp = icons[iconId];
   const className = cx(s.row, isActive ? s.rowActive : null);
@@ -61,40 +61,40 @@ SideBarRow.propTypes = {
   isActive: PropTypes.bool.isRequired,
   to: PropTypes.string.isRequired,
   iconId: PropTypes.string,
-  labelText: PropTypes.string
+  labelText: PropTypes.string,
 };
 
 const pages = [
   {
     to: '/',
     iconId: 'activity',
-    labelText: 'Overview'
+    labelText: 'Overview',
   },
   {
     to: '/proxies',
     iconId: 'globe',
-    labelText: 'Proxies'
+    labelText: 'Proxies',
   },
   {
     to: '/rules',
     iconId: 'command',
-    labelText: 'Rules'
+    labelText: 'Rules',
   },
   {
     to: '/connections',
     iconId: 'link',
-    labelText: 'Conns'
+    labelText: 'Conns',
   },
   {
     to: '/configs',
     iconId: 'settings',
-    labelText: 'Config'
+    labelText: 'Config',
   },
   {
     to: '/logs',
     iconId: 'file',
-    labelText: 'Logs'
-  }
+    labelText: 'Logs',
+  },
 ];
 
 function SideBar({ dispatch, theme }) {
@@ -189,5 +189,5 @@ function Sun() {
   );
 }
 
-const mapState = s => ({ theme: getTheme(s) });
+const mapState = (s) => ({ theme: getTheme(s) });
 export default connect(mapState)(SideBar);

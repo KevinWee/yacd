@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import ContentHeader from './ContentHeader';
 import s0 from './Home.module.css';
 import Loading from './Loading';

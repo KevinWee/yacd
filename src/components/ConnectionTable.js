@@ -1,8 +1,8 @@
 import cx from 'clsx';
 import { formatDistance } from 'date-fns';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { ChevronDown } from 'react-feather';
+import { useTranslation } from 'react-i18next';
 import { useSortBy, useTable } from 'react-table';
 
 import prettyBytes from '../misc/pretty-bytes';
@@ -20,7 +20,7 @@ const columns = [
   { Header: 'Time', accessor: 'start' },
   { Header: 'Source', accessor: 'source' },
   { Header: 'Destination IP', accessor: 'destinationIP' },
-  { Header: 'Type', accessor: 'type' }
+  { Header: 'Type', accessor: 'type' },
 ];
 
 function renderCell(cell, now) {
@@ -42,9 +42,9 @@ const sortById = { id: 'id', desc: true };
 const tableState = {
   sortBy: [
     // maintain a more stable order
-    sortById
+    sortById,
   ],
-  hiddenColumns: ['id']
+  hiddenColumns: ['id'],
 };
 
 function Table({ data }) {
@@ -54,17 +54,17 @@ function Table({ data }) {
       columns,
       data,
       initialState: tableState,
-      autoResetSortBy: false
+      autoResetSortBy: false,
     },
     useSortBy
   );
   let { t } = useTranslation();
   return (
     <div {...getTableProps()}>
-      {headerGroups.map(headerGroup => {
+      {headerGroups.map((headerGroup) => {
         return (
           <div {...headerGroup.getHeaderGroupProps()} className={s.tr}>
-            {headerGroup.headers.map(column => (
+            {headerGroup.headers.map((column) => (
               <div
                 {...column.getHeaderProps(column.getSortByToggleProps())}
                 className={s.th}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { getClashAPIConfig, updateClashAPIConfig } from '../store/app';
 import s0 from './APIConfig.module.css';
@@ -6,12 +7,11 @@ import Button from './Button';
 import Field from './Field';
 import { connect } from './StateProvider';
 import SvgYacd from './SvgYacd';
-import { useTranslation } from 'react-i18next';
 
 const { useState, useEffect, useRef, useCallback } = React;
 
-const mapState = s => ({
-  apiConfig: getClashAPIConfig(s)
+const mapState = (s) => ({
+  apiConfig: getClashAPIConfig(s),
 });
 
 function APIConfig({ apiConfig, dispatch }) {
@@ -45,7 +45,7 @@ function APIConfig({ apiConfig, dispatch }) {
     detectApiServer();
   }, []);
 
-  const handleInputOnChange = useCallback(e => {
+  const handleInputOnChange = useCallback((e) => {
     userTouchedFlagRef.current = true;
     const target = e.target;
     const { name } = target;
@@ -70,7 +70,7 @@ function APIConfig({ apiConfig, dispatch }) {
   }, [hostname, port, secret, dispatch]);
 
   const handleContentOnKeyDown = useCallback(
-    e => {
+    (e) => {
       // enter keyCode is 13
       if (e.keyCode !== 13) return;
       updateConfig();

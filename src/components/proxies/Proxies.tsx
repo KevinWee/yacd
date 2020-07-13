@@ -82,16 +82,16 @@ function Proxies({
     proxies: { closeModalClosePrevConns, closePrevConnsAndTheModal },
   } = useStoreActions();
 
-  let { t } = useTranslation();
-  let groupNamesMod = [];
+  const { t } = useTranslation();
+  const groupNamesMod = [];
   Object.assign(groupNamesMod, groupNames);
   if (mode === 'RULE' || mode === 'DIRECT') {
-    let index = groupNamesMod.indexOf('GLOBAL');
+    const index = groupNamesMod.indexOf('GLOBAL');
     if (index > -1) {
       groupNamesMod.splice(index, 1);
     }
   } else {
-    let index = groupNamesMod.indexOf('GLOBAL');
+    const index = groupNamesMod.indexOf('GLOBAL');
     if (index > -1) {
       groupNamesMod.splice(0, index);
       groupNamesMod.splice(index, index + 1);

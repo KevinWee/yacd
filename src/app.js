@@ -1,11 +1,11 @@
 import 'modern-normalize/modern-normalize.css';
+import './i18n';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 
 import Root from './components/Root';
-import './i18n';
 
 const rootEl = document.getElementById('app');
 
