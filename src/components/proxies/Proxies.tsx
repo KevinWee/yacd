@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { Zap } from 'react-feather';
+import { useTranslation } from 'react-i18next';
 
 import { getClashAPIConfig } from '../../store/app';
+import { getConfigs } from '../../store/configs';
 import {
   fetchProxies,
   getDelay,
@@ -32,6 +34,7 @@ function Proxies({
   proxyProviders,
   apiConfig,
   showModalClosePrevConns,
+  mode,
 }) {
   const refFetchedTimestamp = useRef<{ startAt?: number; completeAt?: number }>(
     {}
@@ -79,6 +82,21 @@ function Proxies({
     proxies: { closeModalClosePrevConns, closePrevConnsAndTheModal },
   } = useStoreActions();
 
+  let { t } = useTranslation();
+  let groupNamesMod = [];
+  Object.assign(groupNamesMod, groupNames);
+  if (mode === 'RULE' || mode === 'DIRECT') {
+    let index = groupNamesMod.indexOf('GLOBAL');
+    if (index > -1) {
+      groupNamesMod.splice(index, 1);
+    }
+  } else {
+    let index = groupNamesMod.indexOf('GLOBAL');
+    if (index > -1) {
+      groupNamesMod.splice(0, index);
+      groupNamesMod.splice(index, index + 1);
+    }
+  }
   return (
     <>
       <BaseModal
@@ -88,7 +106,7 @@ function Proxies({
         <Settings />
       </BaseModal>
       <div className={s0.topBar}>
-        <ContentHeader title="Proxies" />
+        <ContentHeader title={t('Proxies')} />
         <div className={s0.topBarRight}>
           <div className={s0.textFilterContainer}>
             <TextFilter />
@@ -99,7 +117,7 @@ function Proxies({
         </div>
       </div>
       <div>
-        {groupNames.map((groupName: string) => {
+        {groupNamesMod.map((groupName: string) => {
           return (
             <div className={s0.group} key={groupName}>
               <ProxyGroup
@@ -117,7 +135,7 @@ function Proxies({
       <Fab
         icon={isTestingLatency ? <ColorZap /> : <Zap width={16} height={16} />}
         onClick={requestDelayAllFn}
-        text="Test Latency"
+        text={t('Test Latency')}
         position={fabPosition}
       />
       <BaseModal
@@ -156,6 +174,7 @@ const mapState = (s) => ({
   proxyProviders: getProxyProviders(s),
   delay: getDelay(s),
   showModalClosePrevConns: getShowModalClosePrevConns(s),
+  mode: getConfigs(s).mode.toUpperCase(),
 });
 
 export default connect(mapState)(Proxies);

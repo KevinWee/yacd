@@ -5,13 +5,13 @@ import { useTranslation } from 'react-i18next';
 import s0 from './ToggleSwitch.module.css';
 
 function ToggleSwitch({ options, value, name, onChange }) {
-  const idxSelected = useMemo(() => options.map(o => o.value).indexOf(value), [
-    options,
-    value
-  ]);
+  const idxSelected = useMemo(
+    () => options.map((o) => o.value).indexOf(value),
+    [options, value]
+  );
 
   const getPortionPercentage = useCallback(
-    idx => {
+    (idx) => {
       const w = Math.floor(100 / options.length);
       if (idx === options.length - 1) {
         return 100 - options.length * w + w;
@@ -25,10 +25,11 @@ function ToggleSwitch({ options, value, name, onChange }) {
   const sliderStyle = useMemo(() => {
     return {
       width: getPortionPercentage(idxSelected) + '%',
-      left: idxSelected * getPortionPercentage(0) + '%'
+      left: idxSelected * getPortionPercentage(0) + '%',
     };
   }, [idxSelected, getPortionPercentage]);
 
+  let { t } = useTranslation();
   return (
     <div className={s0.ToggleSwitch}>
       <div className={s0.slider} style={sliderStyle} />
@@ -41,7 +42,7 @@ function ToggleSwitch({ options, value, name, onChange }) {
             key={id}
             className={className}
             style={{
-              width: getPortionPercentage(idx) + '%'
+              width: getPortionPercentage(idx) + '%',
             }}
           >
             <input
@@ -64,7 +65,7 @@ ToggleSwitch.propTypes = {
   options: PropTypes.array,
   value: PropTypes.string,
   name: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
 };
 
 export default React.memo(ToggleSwitch);
