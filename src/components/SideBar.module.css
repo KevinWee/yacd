@@ -1,7 +1,7 @@
 .root {
   background: var(--color-bg-sidebar);
   position: relative;
-  min-width: 110px;
+  min-width: 120px;
 }
 
 .logoLink {
