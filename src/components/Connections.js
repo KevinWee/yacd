@@ -182,7 +182,7 @@ function Conn({ apiConfig }) {
               name="filter"
               autoComplete="off"
               className={s.input}
-              placeholder="Filter"
+              placeholder={t('Filter')}
               onChange={(e) => setFilterKeyword(e.target.value)}
             />
           </div>
@@ -215,7 +215,7 @@ function Conn({ apiConfig }) {
                 onClick={toggleIsRefreshPaused}
               >
                 <Action
-                  text="Close All Connections"
+                  text={t('Close All Connections')}
                   onClick={openCloseAllModal}
                 >
                   <IconClose size={10} />
