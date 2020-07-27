@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import { useTranslation } from 'react-i18next';
 import s from './Select.module.css';
 
 type Props = {
@@ -9,11 +9,12 @@ type Props = {
 };
 
 export default function Select({ options, selected, onChange }: Props) {
+  const { t } = useTranslation();
   return (
     <select className={s.select} value={selected} onChange={onChange}>
       {options.map(([value, name]) => (
         <option key={value} value={value}>
-          {name}
+          {t(name)}
         </option>
       ))}
     </select>

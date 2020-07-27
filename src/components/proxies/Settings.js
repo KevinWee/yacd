@@ -1,9 +1,10 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   getAutoCloseOldConns,
   getHideUnavailableProxies,
-  getProxySortBy
+  getProxySortBy,
 } from '../../store/app';
 import Select from '../shared/Select';
 import { connect, useStoreActions } from '../StateProvider';
@@ -15,33 +16,34 @@ const options = [
   ['LatencyAsc', 'By latency from small to big'],
   ['LatencyDesc', 'By latency from big to small'],
   ['NameAsc', 'By name alphabetically (A-Z)'],
-  ['NameDesc', 'By name alphabetically (Z-A)']
+  ['NameDesc', 'By name alphabetically (Z-A)'],
 ];
 
 const { useCallback } = React;
 
 function Settings({ appConfig }) {
   const {
-    app: { updateAppConfig }
+    app: { updateAppConfig },
   } = useStoreActions();
 
   const handleProxySortByOnChange = useCallback(
-    e => {
+    (e) => {
       updateAppConfig('proxySortBy', e.target.value);
     },
     [updateAppConfig]
   );
 
   const handleHideUnavailablesSwitchOnChange = useCallback(
-    v => {
+    (v) => {
       updateAppConfig('hideUnavailableProxies', v);
     },
     [updateAppConfig]
   );
+  const { t } = useTranslation();
   return (
     <>
       <div className={s.labeledInput}>
-        <span>Sorting in group</span>
+        <span>{t('Sorting in group')}</span>
         <div>
           <Select
             options={options}
@@ -52,7 +54,7 @@ function Settings({ appConfig }) {
       </div>
       <hr />
       <div className={s.labeledInput}>
-        <span>Hide unavailable proxies</span>
+        <span>{t('Hide unavailable proxies')}</span>
         <div>
           <Switch
             name="hideUnavailableProxies"
@@ -62,12 +64,12 @@ function Settings({ appConfig }) {
         </div>
       </div>
       <div className={s.labeledInput}>
-        <span>Automatically close old connections</span>
+        <span>{t('Automatically close old connections')}</span>
         <div>
           <Switch
             name="autoCloseOldConns"
             checked={appConfig.autoCloseOldConns}
-            onChange={v => updateAppConfig('autoCloseOldConns', v)}
+            onChange={(v) => updateAppConfig('autoCloseOldConns', v)}
           />
         </div>
       </div>
@@ -75,7 +77,7 @@ function Settings({ appConfig }) {
   );
 }
 
-const mapState = s => {
+const mapState = (s) => {
   const proxySortBy = getProxySortBy(s);
   const hideUnavailableProxies = getHideUnavailableProxies(s);
   const autoCloseOldConns = getAutoCloseOldConns(s);
@@ -84,8 +86,8 @@ const mapState = s => {
     appConfig: {
       proxySortBy,
       hideUnavailableProxies,
-      autoCloseOldConns
-    }
+      autoCloseOldConns,
+    },
   };
 };
 export default connect(mapState)(Settings);
